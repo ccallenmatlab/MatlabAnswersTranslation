@@ -1,0 +1,1558 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Can you get matlab to add a really small number to a big number and retain precision - MATLAB Answers - MATLAB Central</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="icon" href="Matlab_Logo.png">
+<link rel="stylesheet" href="styling">
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Noto Sans JP', 'Roboto', sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #333;
+  background-color: #fff;
+}
+
+a {
+  color: #0076a8;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.container {
+  margin: 0 225px;
+  padding: 0;
+}
+
+/* Top Navigation Bar */
+.top-nav {
+  background: #fff;
+  padding: 8px 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.top-nav .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.top-nav-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.top-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  margin-top: -8px;
+  margin-bottom: -8px;
+  border-left: 1px solid #bfbfbf;
+  border-right: 1px solid #bfbfbf;
+}
+
+.logo-area svg {
+  width: 34px;
+  height: 30px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 14px;
+  list-style: none;
+}
+
+.nav-links a {
+  color: #616161;
+  font-size: 16px;
+  font-weight: 400;
+  padding: 6px 14px;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.nav-links a.active {
+  color: #fff;
+  background: #0076a8;
+  font-weight: 400;
+  padding-top: 14px;
+  padding-bottom: 14px;
+  margin-top: -8px;
+  margin-bottom: -8px;
+  border-radius: 0;
+}
+
+.btn-matlab {
+  background: #0076a8;
+  color: #fff;
+  border: none;
+  padding: 6px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-matlab:hover {
+  background: #005f8a;
+  text-decoration: none;
+  color: #fff;
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #0076a8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #555;
+  font-size: 18px;
+  padding: 4px;
+}
+
+/* Secondary Navigation */
+.sub-nav {
+  background: #0076a8;
+  padding: 0;
+  position: relative;
+  z-index: 10;
+  box-shadow: 0 4px 4px 0 rgba(0,0,0,0.2);
+}
+
+.sub-nav .container {
+  display: flex;
+  align-items: center;
+}
+
+.sub-nav-links {
+  display: flex;
+  list-style: none;
+  gap: 0;
+}
+
+.sub-nav-links li a {
+  display: inline-block;
+  padding: 10px 16px;
+  color: #fff;
+  font-size: 14px;
+}
+
+.sub-nav-links li a.active {
+  font-weight: 500;
+  border-bottom: 3px solid #fff;
+}
+
+.sub-nav-links li a:hover {
+  text-decoration: none;
+}
+
+/* Tertiary Navigation (Local Nav) */
+.local-nav {
+  background: #f5f5f5;
+  border-bottom: none;
+  padding: 0;
+}
+
+.local-nav .container {
+  display: flex;
+  align-items: center;
+}
+
+.local-nav-links {
+  display: flex;
+  list-style: none;
+  gap: 0;
+}
+
+.local-nav-links li a {
+  display: inline-block;
+  padding: 8px 14px;
+  color: #0076a8;
+  font-size: 13px;
+}
+
+.local-nav-links li a:hover {
+  color: #0076a8;
+  text-decoration: none;
+}
+
+/* Leaf Meta (Question Header Band) */
+.leaf-meta {
+  background: #f5f5f5;
+  padding: 16px 0 20px;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 24px;
+}
+
+.leaf-meta-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.leaf-meta-left {
+  flex: 1;
+}
+
+.question-title {
+  color: #c04c0b;
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+
+.post-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 24px;
+  font-size: 14px;
+  color: #666;
+}
+
+.post-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.post-meta-item a {
+  color: #666;
+}
+
+.post-meta-item.accepted {
+  color: #008012;
+  font-weight: 700;
+}
+
+.post-meta-item.accepted a {
+  color: #008012;
+}
+
+.author-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #ccc;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: #fff;
+  border: 1px solid #ddd;
+  vertical-align: middle;
+}
+
+.author-avatar-lg {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #ccc;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: #fff;
+  border: 1px solid #ddd;
+  flex-shrink: 0;
+}
+
+.leaf-meta-right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  min-width: 200px;
+}
+
+.btn-blue {
+  background: #0076a8;
+  color: #fff;
+  border: none;
+  padding: 0.4rem 0.875rem;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+}
+
+.btn-blue:hover {
+  background: #005f8a;
+  text-decoration: none;
+  color: #fff;
+}
+
+.btn-outline-blue {
+  background: #fff;
+  color: #0076a8;
+  border: 1px solid #0076a8;
+  padding: 0.4rem 0.875rem;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-outline-blue:hover {
+  background: #f0f7fc;
+  text-decoration: none;
+}
+
+.meta-actions {
+  display: flex;
+  gap: 16px;
+  font-size: 14px;
+}
+
+.meta-actions a {
+  color: #0076a8;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+}
+
+.meta-actions a:hover {
+  text-decoration-color: #0076a8;
+}
+
+/* Main Content Layout */
+.main-layout {
+  display: flex;
+  gap: 132px;
+  margin-top: 0;
+}
+
+.main-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.sidebar {
+  width: 280px;
+  flex-shrink: 0;
+}
+
+/* Panel Styles */
+.panel {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 24px;
+}
+
+.panel-body {
+  padding: 16px;
+}
+
+/* Question Section */
+.question-section .panel-body {
+  padding: 16px 20px;
+}
+
+.question-header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 12px;
+  gap: 16px;
+}
+
+.vote-count {
+  color: #666;
+  font-size: 14px;
+}
+
+.kebab-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
+  font-size: 20px;
+  padding: 4px 8px;
+  line-height: 1;
+}
+
+.question-body {
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.question-body p {
+  margin-bottom: 12px;
+}
+
+/* Comments Section */
+.comments-section {
+  border-top: 1px solid #eee;
+  padding-top: 12px;
+  margin-top: 16px;
+}
+
+.comments-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.comments-header .icon {
+  color: #666;
+}
+
+.comment {
+  margin-left: 24px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+}
+
+.comment:last-child {
+  border-bottom: none;
+}
+
+.comment-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.comment-author {
+  font-weight: 500;
+  color: #0076a8;
+}
+
+.comment-date {
+  color: #999;
+  font-size: 12px;
+}
+
+.badge-level {
+  color: #0076a8;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.badge-mvp {
+  color: #c04c0b;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.badge-staff {
+  color: #0076a8;
+  font-size: 12px;
+  font-weight: 500;
+  background: none;
+  padding: 0;
+}
+
+.comment-body {
+  margin-left: 32px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.comment-body p {
+  margin-bottom: 6px;
+}
+
+/* Question Footer */
+.question-footer {
+  text-align: right;
+  margin-top: 16px;
+  padding-top: 16px;
+}
+
+.question-footer-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+/* Accepted Answer Section */
+.accepted-answer-section {
+  margin-bottom: 24px;
+}
+
+.accepted-answer-label {
+  color: #4caf50;
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.accepted-answer-label .checkmark {
+  font-size: 20px;
+}
+
+.accepted-answer-panel {
+  border-top: 3px solid #4caf50;
+}
+
+.answer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.answer-author-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.answer-author-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.answer-author-name {
+  font-weight: 500;
+  color: #0076a8;
+  font-size: 14px;
+}
+
+.answer-date {
+  color: #999;
+  font-size: 12px;
+}
+
+.answer-meta-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 13px;
+}
+
+.ran-in-label {
+  color: #666;
+  font-size: 12px;
+}
+
+/* Code Blocks */
+.code-block {
+  background: #f7f7f7;
+  border: 1px solid #e8e8e8;
+  border-radius: 3px;
+  margin: 12px 0;
+  position: relative;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 13px;
+}
+
+.code-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 4px 8px;
+  position: relative;
+  height: 0;
+  float: right;
+}
+
+.code-toolbar button {
+  background: none;
+  border: none;
+  color: #6f6f6f;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-family: 'Noto Sans JP', 'Roboto', sans-serif;
+}
+
+.code-toolbar button:hover {
+  color: #000;
+}
+
+.code-content {
+  padding: 10px 14px;
+}
+
+.code-input {
+  color: #333;
+  padding: 1px 0;
+}
+
+.code-output {
+  color: #333;
+  padding: 4px 0;
+}
+
+.code-comment {
+  color: #228b22;
+}
+
+.variable-name {
+  font-weight: normal;
+}
+
+.code-header {
+  color: #666;
+}
+
+/* Answer content text */
+.answer-body {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.answer-body p {
+  margin-bottom: 12px;
+}
+
+.answer-body code {
+  background: #f0f0f0;
+  padding: 1px 4px;
+  border-radius: 2px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 13px;
+}
+
+/* More Answers */
+.more-answers {
+  margin-bottom: 24px;
+}
+
+.more-answers-header {
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 14px 20px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+}
+
+.more-answers-header:hover {
+  background: #f0f0f0;
+}
+
+/* Sidebar Panels */
+.sidebar .panel {
+  margin-bottom: 20px;
+}
+
+.sidebar .panel-body {
+  padding: 12px 16px;
+}
+
+.announcement-panel {
+  border-left: 4px solid #c04c0b;
+}
+
+.announcement-panel .announcement-label {
+  color: #c04c0b;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.announcement-panel h6 {
+  font-size: 13px;
+  color: #0076a8;
+  font-weight: 700;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.announcement-panel .announcement-body {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: #555;
+}
+
+.announcement-panel .announcement-thumb {
+  width: 56px;
+  height: 56px;
+  background: #f0f0f0;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 10px;
+  color: #999;
+}
+
+/* Activity Meta Panel */
+.activity-meta .meta-item {
+  padding-bottom: 16px;
+  margin-bottom: 0;
+}
+
+.activity-meta .meta-item:last-child {
+  padding-bottom: 0;
+}
+
+.activity-meta .meta-label {
+  color: #0076a8;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.activity-meta .meta-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+
+.activity-meta .meta-date {
+  color: #666;
+  font-size: 13px;
+  margin-left: 32px;
+}
+
+/* Treasure Hunt Card */
+.treasure-hunt-card {
+  overflow: hidden;
+}
+
+.treasure-hunt-card .card-banner {
+  height: 80px;
+  background: #0076a8;
+  position: relative;
+}
+
+.treasure-hunt-card .card-banner::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px;
+  height: 60px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+}
+
+.treasure-hunt-card .card-body {
+  padding: 16px;
+}
+
+.treasure-hunt-card h3 {
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+
+.treasure-hunt-card p {
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+.treasure-hunt-card a {
+  font-size: 13px;
+  color: #0076a8;
+}
+
+/* Related Content */
+.related-content {
+  margin-top: 24px;
+}
+
+.related-content h4 {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 12px;
+  color: #333;
+}
+
+.related-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+  gap: 12px;
+}
+
+.related-item a {
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.related-item .answer-status {
+  font-size: 12px;
+  white-space: nowrap;
+  color: #999;
+}
+
+.related-item .answer-status.accepted {
+  color: #4caf50;
+}
+
+/* Footer */
+.site-footer {
+  background: #e6e6e6;
+  border-top: 1px solid #ddd;
+  padding: 40px 0;
+  margin-top: 40px;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.footer-left {
+  flex: 1;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  list-style: none;
+  margin-bottom: 8px;
+}
+
+.footer-links a {
+  color: #333;
+  font-size: 13px;
+}
+
+.copyright {
+  color: #666;
+  font-size: 12px;
+}
+
+.btn-region {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  color: #333;
+  border: 1px solid #333;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: 'Noto Sans JP', 'Roboto', sans-serif;
+  text-decoration: none;
+}
+
+.btn-region:hover {
+  background: rgba(0,0,0,0.05);
+  text-decoration: none;
+}
+
+/* SVG Icon for matrix/grid */
+.grid-icon svg {
+  width: 20px;
+  height: 20px;
+  fill: #555;
+}
+
+/* Utility classes */
+.text-green { color: #4caf50; }
+.text-orange { color: #c04c0b; }
+.text-blue { color: #0076a8; }
+.fw-500 { font-weight: 500; }
+.italic { font-style: italic; }
+
+/* Inline Translate Button */
+.btn-inline-translate {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #fff;
+  color: #0076a8;
+  border: 1px solid #0076a8;
+  padding: 5px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: 'Noto Sans JP', 'Roboto', sans-serif;
+  transition: background 0.15s ease;
+}
+
+.btn-inline-translate:hover {
+  background: #f0f7fc;
+}
+
+.btn-inline-translate.translated {
+  background: #e8f5e9;
+  border-color: #4caf50;
+  color: #2e7d32;
+}
+
+</style>
+</head>
+<body>
+
+<!-- Top Navigation Bar -->
+<nav class="top-nav">
+  <div class="container">
+    <div class="top-nav-left">
+      <a href="#" class="logo-area">
+        <img src="Matlab_Logo.png" alt="MathWorks" style="height: 30px; width: auto;">
+      </a>
+      <ul class="nav-links">
+        <li><a href="#">MATLAB ヘルプセンター</a></li>
+        <li><a href="#" class="active">コミュニティ</a></li>
+        <li><a href="#">ラーニング</a></li>
+      </ul>
+    </div>
+    <div class="top-nav-right">
+      <a href="#" class="btn-matlab">MATLAB</a>
+      <div class="user-avatar">C</div>
+      <button class="icon-btn" aria-label="検索">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="M21 21l-4.35-4.35"></path>
+        </svg>
+      </button>
+      <button class="icon-btn grid-icon" aria-label="メニュー">
+        <svg viewBox="0 0 19.5 19.5">
+          <path fill="currentColor" d="M3.8,4.5H.8c-.4,0-.8-.3-.8-.8V.8c0-.4.3-.8.8-.8h3c.5,0,.8.3.8.8v3c0,.5-.3.8-.8.8Z"/>
+          <path fill="currentColor" d="M18.8,4.5h-3c-.5,0-.8-.3-.8-.8V.8c0-.4.3-.8.8-.8h3c.5,0,.8.3.8.8v3c0,.5-.3.8-.8.8Z"/>
+          <path fill="currentColor" d="M11.2,4.5h-3c-.5,0-.8-.3-.8-.8V.8c0-.4.3-.8.8-.8h3c.5,0,.8.3.8.8v3c0,.5-.3.8-.8.8Z"/>
+          <path fill="currentColor" d="M3.8,19.5H.8c-.4,0-.8-.3-.8-.8v-3c0-.5.3-.8.8-.8h3c.5,0,.8.3.8.8v3c0,.5-.3.8-.8.8Z"/>
+          <path fill="currentColor" d="M18.8,19.5h-3c-.5,0-.8-.3-.8-.8v-3c0-.5.3-.8.8-.8h3c.5,0,.8.3.8.8v3c0,.5-.3.8-.8.8Z"/>
+          <path fill="currentColor" d="M11.2,19.5h-3c-.5,0-.8-.3-.8-.8v-3c0-.5.3-.8.8-.8h3c.5,0,.8.3.8.8v3c0,.5-.3.8-.8.8Z"/>
+          <path fill="currentColor" d="M3.8,12H.8c-.4,0-.8-.3-.8-.8v-3c0-.5.3-.8.8-.8h3c.5,0,.8.3.8.8v3c0,.5-.3.8-.8.8Z"/>
+          <path fill="currentColor" d="M18.8,12h-3c-.5,0-.8-.3-.8-.8v-3c0-.5.3-.8.8-.8h3c.5,0,.8.3.8.8v3c0,.5-.3.8-.8.8Z"/>
+          <path fill="currentColor" d="M11.2,12h-3c-.5,0-.8-.3-.8-.8v-3c0-.5.3-.8.8-.8h3c.5,0,.8.3.8.8v3c0,.5-.3.8-.8.8Z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Secondary Navigation -->
+<nav class="sub-nav">
+  <div class="container">
+    <ul class="sub-nav-links">
+      <li><a href="#" class="active">MATLAB Answers</a></li>
+      <li><a href="#">File Exchange</a></li>
+      <li><a href="#">Cody</a></li>
+      <li><a href="#">AI Chat Playground</a></li>
+      <li><a href="#">ディスカッション</a></li>
+      <li><a href="#">コンテスト</a></li>
+      <li><a href="#">ブログ</a></li>
+      <li><a href="#">その他 &#9662;</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Tertiary Navigation (Local Nav) -->
+<nav class="local-nav">
+  <div class="container">
+    <ul class="local-nav-links">
+      <li><a href="#">ホーム</a></li>
+      <li><a href="#">マイ MATLAB Answers &#9662;</a></li>
+      <li><a href="#">質問する</a></li>
+      <li><a href="#">回答する</a></li>
+      <li><a href="#">閲覧</a></li>
+      <li><a href="#">MATLAB FAQ</a></li>
+      <li><a href="#">その他 &#9662;</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Leaf Meta (Question Header Band) -->
+<section class="leaf-meta">
+  <div class="container">
+    <div class="leaf-meta-content">
+      <div class="leaf-meta-left" style="max-width: calc(100% - 412px);">
+        <h1 class="question-title" id="question-title">Can you get matlab to add a really small number to a big number and retain precision</h1>
+        <div class="post-meta">
+          <div class="post-meta-item">
+            <span class="author-avatar" style="background: #7b9fc2;">SM</span>
+            <a href="#" style="font-weight: 500; color: #0076a8;">Stephen Maldonado</a>
+          </div>
+          <div class="post-meta-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+            2026年4月17日
+          </div>
+          <div class="post-meta-item">
+            <img src="comment-fill.svg" alt="" style="width: 16px; height: 16px;">
+            5件の回答
+          </div>
+          <div class="post-meta-item accepted">
+            <img src="circle_check.svg" alt="" style="width: 14px; height: 14px; filter: invert(30%) sepia(90%) saturate(800%) hue-rotate(130deg) brightness(60%);">
+            <a href="#accepted-answer">回答承認済み</a>
+          </div>
+          <div class="post-meta-item">
+            <a href="#" style="color: #1172BE;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1172BE" stroke-width="2" style="vertical-align: middle;"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+              更新日 2026年5月6日
+            </a>
+          </div>
+          <div style="flex-basis: 100%; height: 0;"></div>
+          <div class="post-meta-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#666" stroke="none"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zm0 12.5c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+            410 ビュー (30日間)
+          </div>
+        </div>
+      </div>
+      <div class="leaf-meta-right" style="width: 280px; min-width: 280px;">
+        <a href="#" class="btn-blue">この質問に回答する</a>
+        <div class="meta-actions">
+          <a href="#" style="display: inline-flex; align-items: center; gap: 6px;"><img src="share-fill.svg" alt="" style="width: 14px; height: 14px; filter: invert(35%) sepia(90%) saturate(500%) hue-rotate(170deg) brightness(70%);">共有</a>
+          <a href="#" style="display: inline-flex; align-items: center; gap: 6px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0076a8" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M6 12h12"/></svg>質問をフォロー</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Main Content -->
+<div class="container">
+  <div class="main-layout">
+    <!-- Left Column -->
+    <main class="main-content">
+
+      <div style="text-align: right; margin-bottom: 8px;">
+        <a href="#" style="color: #616161; font-size: 13px;">古いコメントを表示</a>
+      </div>
+
+      <!-- Question Panel -->
+      <div class="panel question-section">
+        <div class="panel-body">
+          <div class="question-header">
+            <span class="vote-count">0票</span>
+            <button class="kebab-btn" aria-label="その他のアクション">&#8942;</button>
+          </div>
+
+          <div class="question-body" id="question-body">
+            <p>I am trying to calculate small numbers from equations like the one below.</p>
+            <p>p = -1e17 + sqrt(1e34 + 1e18)</p>
+            <p>I have tried using 'vpa(-1e17 + sqrt(1e34 + 1e18), 30) but the output always comes out as p = 0.0. But p is not exactly zero and this propagates errors in subsequent calculations that involve p. Is there another way to retain sig figs to avoid rounding errors?</p>
+          </div>
+
+          <!-- Inline Translate Button for Question -->
+          <div style="display: flex; justify-content: flex-end; margin-bottom: 12px;">
+            <button class="btn-inline-translate" onclick="translateSection(this, 'question')">
+              <img src="translate.svg" alt="" style="width: 14px; height: 14px;">
+              翻訳
+            </button>
+          </div>
+
+          <!-- Comments on Question -->
+          <div class="comments-section" id="question-comments-section">
+            <div class="comments-header">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+              <span>2件のコメント</span>
+            </div>
+
+            <div class="comment" id="question-comment-1">
+              <div class="comment-header">
+                <span class="author-avatar" style="background: #5a8faf;">WR</span>
+                <a href="#" class="comment-author">Walter Roberson</a>
+                <span class="badge-level" title="ユーザーレベル 10/10">&#9733;10</span>
+                <span class="badge-mvp" title="最も価値のある参加者">MVP</span>
+                <span class="comment-date">2026年5月1日 17:58</span>
+              </div>
+              <div class="comment-body">
+                <p>@FUN-AKEDE</p>
+                <p><strong>Open the Neural Net Fitting App</strong></p>
+                <ul style="margin: 8px 0 8px 20px; font-size: 13px;">
+                  <li><em>Before R2026a: MATLAB Toolstrip: On the <strong>Apps</strong> tab, under <strong>Machine Learning and Deep Learning</strong>, click the app icon.</em></li>
+                  <li>MATLAB command prompt: Enter <code>nftool</code>.</li>
+                </ul>
+                <p>The implication is that it can only be opened from the command line in R2026a.</p>
+              </div>
+              <div style="display: flex; justify-content: flex-end; margin-top: 4px; margin-left: 32px;">
+                <button class="btn-inline-translate" onclick="translateComment(this, 'question-comment-1')">
+                  <img src="translate.svg" alt="" style="width: 14px; height: 14px;">
+                  翻訳
+                </button>
+              </div>
+            </div>
+
+            <div class="comment" id="question-comment-2">
+              <div class="comment-header">
+                <span class="author-avatar" style="background: #5a8faf;">WR</span>
+                <a href="#" class="comment-author">Walter Roberson</a>
+                <span class="badge-level" title="ユーザーレベル 10/10">&#9733;10</span>
+                <span class="badge-mvp" title="最も価値のある参加者">MVP</span>
+                <span class="comment-date">2026年5月2日 17:48</span>
+              </div>
+              <div class="comment-body">
+                <p>@Steven Lord</p>
+                <p>This was posted in response to a comment from FUN-AKEDE about being unable to find the Neural Fitting app in the toolstrip. They have removed the comment since then.</p>
+              </div>
+              <div style="display: flex; justify-content: flex-end; margin-top: 4px; margin-left: 32px;">
+                <button class="btn-inline-translate" onclick="translateComment(this, 'question-comment-2')">
+                  <img src="translate.svg" alt="" style="width: 14px; height: 14px;">
+                  翻訳
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Question Footer -->
+      <div class="question-footer">
+        <a href="#" class="btn-blue" style="width: auto; display: inline-block;">この質問に回答する</a>
+        <div class="question-footer-actions">
+          <a href="#" style="display: inline-flex; align-items: center; gap: 6px;"><img src="share-fill.svg" alt="" style="width: 14px; height: 14px; filter: invert(35%) sepia(90%) saturate(500%) hue-rotate(170deg) brightness(70%);">共有</a>
+          <a href="#" style="display: inline-flex; align-items: center; gap: 6px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0076a8" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M6 12h12"/></svg>質問をフォロー</a>
+          <a href="#" style="display: inline-flex; align-items: center; gap: 6px;"><img src="flag-fill.svg" alt="" style="width: 14px; height: 14px; filter: invert(35%) sepia(90%) saturate(500%) hue-rotate(170deg) brightness(70%);">報告</a>
+        </div>
+      </div>
+
+      <!-- Accepted Answer Section -->
+      <div class="accepted-answer-section" id="accepted-answer" style="margin-top: 32px;">
+        <div class="accepted-answer-label" style="color: #008012; font-size: 15px;">
+          <img src="circle_check.svg" alt="" style="width: 16px; height: 16px; filter: invert(30%) sepia(90%) saturate(800%) hue-rotate(130deg) brightness(60%);"> 承認された回答
+        </div>
+        <div class="panel accepted-answer-panel">
+          <div class="panel-body">
+            <!-- Answer Header -->
+            <div class="answer-header">
+              <div class="answer-author-info">
+                <span class="author-avatar-lg" style="background: #4a7fb5;">SL</span>
+                <div class="answer-author-details">
+                  <div style="display: flex; align-items: center; gap: 6px;">
+                    <a href="#" class="answer-author-name">Steven Lord</a>
+                    <span class="badge-staff" title="MathWorks スタッフ">&#9670; スタッフ</span>
+                    <span class="badge-mvp" title="最も価値のある参加者">MVP</span>
+                  </div>
+                  <span class="answer-date">2026年4月17日 5:23</span>
+                </div>
+              </div>
+              <div class="answer-meta-right">
+                <span class="ran-in-label">実行環境: <strong>R2025a</strong></span>
+                <a href="#" class="btn-outline-blue">MATLAB Online で開く</a>
+                <span class="vote-count">3票</span>
+                <button class="kebab-btn" aria-label="その他のアクション">&#8942;</button>
+              </div>
+            </div>
+
+            <!-- Answer Body -->
+            <div class="answer-body" id="accepted-answer-body">
+              <!-- Code block 1 -->
+              <div class="code-block">
+                <div class="code-toolbar">
+                  <button><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg> テーマ</button>
+                  <button><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> コピー</button>
+                </div>
+                <div class="code-content">
+                  <div class="code-input">p = -1e17 + sqrt(1e34 + 1e18)</div>
+                  <div class="code-output"><span class="variable-name">p = </span>0</div>
+                </div>
+              </div>
+
+              <p>p is in fact exactly 0 if you do the calculation <em>in double precision</em>.</p>
+
+              <!-- Code block 2 -->
+              <div class="code-block">
+                <div class="code-toolbar">
+                  <button><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg> テーマ</button>
+                  <button><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> コピー</button>
+                </div>
+                <div class="code-content">
+                  <div class="code-input">p == 0 <span class="code-comment">% true</span></div>
+                  <div class="code-output"><span class="variable-name">ans = <span class="code-header">logical</span></span><br>&nbsp;&nbsp; 1</div>
+                </div>
+              </div>
+
+              <p>Why didn't it work with <code>vpa</code>? The way you called <code>vpa</code>:</p>
+
+              <!-- Code block 3 -->
+              <div class="code-block">
+                <div class="code-toolbar">
+                  <button><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg> テーマ</button>
+                  <button><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> コピー</button>
+                </div>
+                <div class="code-content">
+                  <div class="code-input">p = vpa(-1e17 + sqrt(1e34 + 1e18), 30)</div>
+                  <div class="code-output"><span class="variable-name">p = </span>0.0</div>
+                </div>
+              </div>
+
+              <p>you're doing the calculations to generate the input argument with which vpa() will be called in double precision and passing that double precision result into vpa. By the time vpa gets called, p is already 0.</p>
+
+              <p>You could convert each of the numbers into <code>sym</code> and then do the calculations. If you do this, MATLAB will do the calculations symbolically; note the radical sign in the display of p.</p>
+
+              <!-- Code block 4 -->
+              <div class="code-block">
+                <div class="code-toolbar">
+                  <button><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg> テーマ</button>
+                  <button><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> コピー</button>
+                </div>
+                <div class="code-content">
+                  <div class="code-input">x17 = sym(1e17);</div>
+                  <div class="code-input">x34 = sym(1e34);</div>
+                  <div class="code-input">x18 = sym(1e18);</div>
+                  <div class="code-input">p = -x17 + sqrt(x34+x18)</div>
+                  <div class="code-output"><span class="variable-name">p = </span>(10000000000000000100000000000000000)<sup>1/2</sup> - 100000000000000000</div>
+                </div>
+              </div>
+
+              <p>Then you can call vpa on that symbolic answer to evaluate it using variable precision arithmetic.</p>
+
+              <!-- Code block 5 -->
+              <div class="code-block">
+                <div class="code-toolbar">
+                  <button><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg> テーマ</button>
+                  <button><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> コピー</button>
+                </div>
+                <div class="code-content">
+                  <div class="code-input">vpa(p, 30)</div>
+                  <div class="code-output"><span class="variable-name">ans = </span>4.99999999999999987499995984189</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Inline Translate Button for Answer -->
+            <div style="display: flex; justify-content: flex-end; margin-top: 12px;">
+              <button class="btn-inline-translate" onclick="translateSection(this, 'accepted-answer')">
+                <img src="translate.svg" alt="" style="width: 14px; height: 14px;">
+                翻訳
+              </button>
+            </div>
+
+            <!-- Comments on Accepted Answer -->
+            <div class="comments-section" id="answer-comments-section">
+              <div class="comments-header">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                <span>8件のコメント</span>
+                <a href="#" style="font-size: 13px; color: #999; margin-left: 8px;">古い6件のコメントを表示</a>
+              </div>
+
+              <div class="comment" id="answer-comment-1">
+                <div class="comment-header">
+                  <span class="author-avatar" style="background: #6a9bbf;">JT</span>
+                  <a href="#" class="comment-author">James Tursa</a>
+                  <span class="badge-level" title="ユーザーレベル 9/10">&#9733;9</span>
+                  <span class="badge-mvp" title="最も価値のある参加者">MVP</span>
+                  <span class="comment-date">2026年4月22日 1:02</span>
+                </div>
+                <div class="comment-body">
+                  <p>A good explanation. One additional approach that doesn't require Symbolic Math Toolbox is to rearrange the expression algebraically. For the expression -a + sqrt(a^2 + b), multiply and divide by the conjugate to get b / (a + sqrt(a^2 + b)), which avoids catastrophic cancellation.</p>
+                </div>
+                <div style="display: flex; justify-content: flex-end; margin-top: 4px; margin-left: 32px;">
+                  <button class="btn-inline-translate" onclick="translateComment(this, 'answer-comment-1')">
+                    <img src="translate.svg" alt="" style="width: 14px; height: 14px;">
+                    翻訳
+                  </button>
+                </div>
+              </div>
+
+              <div class="comment" id="answer-comment-2">
+                <div class="comment-header">
+                  <span class="author-avatar" style="background: #4a7fb5;">SL</span>
+                  <a href="#" class="comment-author">Steven Lord</a>
+                  <span class="badge-staff" title="MathWorks スタッフ">&#9670; スタッフ</span>
+                  <span class="badge-mvp" title="最も価値のある参加者">MVP</span>
+                  <span class="comment-date">2026年5月2日 20:37</span>
+                </div>
+                <div class="comment-body">
+                  <p>Good point, James. Rearranging to avoid catastrophic cancellation is often the best approach when you can do it, since it doesn't require additional toolboxes and works with the native double precision arithmetic.</p>
+                </div>
+                <div style="display: flex; justify-content: flex-end; margin-top: 4px; margin-left: 32px;">
+                  <button class="btn-inline-translate" onclick="translateComment(this, 'answer-comment-2')">
+                    <img src="translate.svg" alt="" style="width: 14px; height: 14px;">
+                    翻訳
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- More Answers -->
+      <div class="more-answers">
+        <div class="more-answers-header">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2" style="vertical-align: middle; margin-right: 8px;"><path d="M6 9l6 6 6-6"/></svg>
+          その他の回答 (4)
+        </div>
+      </div>
+
+      <!-- Related Content -->
+      <div class="related-content" style="margin-bottom: 32px;">
+        <h4>MATLAB Answers</h4>
+        <div class="related-item">
+          <a href="#">Error using vpa in Matlab2018b</a>
+          <span class="answer-status">0件の回答</span>
+        </div>
+        <div class="related-item">
+          <a href="#">Optimization of multiple variables</a>
+          <span class="answer-status">1件の回答</span>
+        </div>
+        <div class="related-item">
+          <a href="#">fmincon for multiple variables</a>
+          <span class="answer-status accepted">1件の回答</span>
+        </div>
+
+        <h4 style="margin-top: 20px;">サイト全体</h4>
+        <div class="related-item">
+          <a href="#">A limited set of basic number theoretic tools</a>
+          <span class="answer-status" style="color: #999;">File Exchange</span>
+        </div>
+        <div class="related-item">
+          <a href="#">Ostrogradsky's Method</a>
+          <span class="answer-status" style="color: #999;">File Exchange</span>
+        </div>
+        <div class="related-item">
+          <a href="#">Trigonometric function errors at pi or pi/2 such as sin(pi) or cos(pi/2)</a>
+          <span class="answer-status" style="color: #999;">File Exchange</span>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Right Sidebar -->
+    <aside class="sidebar">
+
+      <!-- Announcement Panel -->
+      <div class="panel announcement-panel">
+        <div class="panel-body">
+          <div class="announcement-label">お知らせ</div>
+          <a href="#">
+            <h6>Cleve Moler氏が米国科学アカデミーに選出されました</h6>
+          </a>
+          <div class="announcement-body">
+            <div class="announcement-thumb" style="background: #e8f4e8; border-radius: 4px;">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#4caf50" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+            <div>MATLABの生みの親であるCleve Moler氏が米国科学アカデミーに選出されたことをお知らせいたします...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Activity Meta Panel -->
+      <div class="panel">
+        <div class="panel-body activity-meta">
+          <div class="meta-item">
+            <p class="meta-label"><a href="#">質問者:</a></p>
+            <div class="meta-user">
+              <span class="author-avatar" style="background: #7b9fc2;">SM</span>
+              <a href="#" style="font-weight: 500;">Stephen Maldonado</a>
+            </div>
+            <div class="meta-date">2026年4月17日 4:36</div>
+          </div>
+          <div class="meta-item" style="padding-top: 16px;">
+            <p class="meta-label"><a href="#">編集者:</a></p>
+            <div class="meta-user">
+              <span class="author-avatar" style="background: #8faf5a;">MN</span>
+              <a href="#" style="font-weight: 500;">Mathieu NOE</a>
+              <span class="badge-level" title="ユーザーレベル 8/10">&#9733;8</span>
+              <span class="badge-mvp" title="最も価値のある参加者">MVP</span>
+            </div>
+            <div class="meta-date">2026年5月6日 11:40</div>
+          </div>
+          <div class="meta-item" style="padding-top: 16px;">
+            <p class="meta-label"><a href="#">承認:</a></p>
+            <div class="meta-user">
+              <span class="author-avatar" style="background: #4a7fb5;">SL</span>
+              <a href="#" style="font-weight: 500;">Steven Lord</a>
+              <span class="badge-staff" title="MathWorks スタッフ">&#9670; スタッフ</span>
+              <span class="badge-mvp" title="最も価値のある参加者">MVP</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Treasure Hunt Card -->
+      <div class="panel treasure-hunt-card">
+        <div class="card-banner"></div>
+        <div class="card-body">
+          <h3>コミュニティ トレジャーハント</h3>
+          <p>MATLAB Central でトレジャーを見つけて、コミュニティがどのように役立つか発見しましょう！</p>
+          <a href="#">ハントを開始！ &#8250;</a>
+        </div>
+      </div>
+
+      <!-- Related Content Spotlight -->
+      <div class="panel">
+        <div style="height: 120px; background: linear-gradient(135deg, #2c5f8a, #1a3a5c); display: flex; align-items: center; justify-content: center;">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <div class="panel-body">
+          <h3 style="font-size: 14px; margin-bottom: 8px;">MATLABによる予知保全入門</h3>
+          <p style="font-size: 13px;"><a href="#">電子書籍を読む &#8250;</a></p>
+        </div>
+      </div>
+
+    </aside>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-left">
+        <ul class="footer-links">
+          <li><a href="#">トラストセンター</a></li>
+          <li><a href="#">商標</a></li>
+          <li><a href="#">プライバシーポリシー</a></li>
+          <li><a href="#">海賊版防止</a></li>
+          <li><a href="#">アプリケーションステータス</a></li>
+          <li><a href="#">利用規約</a></li>
+          <li><a href="#">お問い合わせ</a></li>
+        </ul>
+        <p class="copyright">&copy; 1994-2026 The MathWorks, Inc.</p>
+      </div>
+      <a href="#" class="btn-region">
+        <img src="globe.svg" alt="" style="width: 16px; height: 16px;">
+        日本
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script>
+function translateSection(btn, sectionId) {
+  var container = document.getElementById(getContainerId(sectionId));
+
+  if (btn.classList.contains('translated')) {
+    btn.classList.remove('translated');
+    btn.innerHTML = '<img src="translate.svg" alt="" style="width: 14px; height: 14px;"> 翻訳';
+
+    if (sectionId === 'question') {
+      var titleEl = document.getElementById('question-title');
+      titleEl.textContent = titleEl.getAttribute('data-original');
+      titleEl.removeAttribute('data-original');
+    }
+
+    container.innerHTML = container.getAttribute('data-original');
+    container.removeAttribute('data-original');
+    return;
+  }
+
+  btn.classList.add('translated');
+  btn.innerHTML = '<img src="translate.svg" alt="" style="width: 14px; height: 14px;"> 元の文を表示';
+
+  var translations = {
+    'question':
+      '<p>以下のような方程式から小さな数値を計算しようとしています。</p>' +
+      '<p>p = -1e17 + sqrt(1e34 + 1e18)</p>' +
+      '<p>\'vpa(-1e17 + sqrt(1e34 + 1e18), 30) を使ってみましたが、出力は常に p = 0.0 になります。しかし p は正確にはゼロではなく、p を含む後続の計算で誤差が伝播します。丸め誤差を避けるために有効数字を保持する別の方法はありますか？</p>',
+    'accepted-answer':
+      '<p>倍精度で計算を行う場合、p は実際に正確に 0 です。</p>' +
+      '<div class="code-block"><div class="code-toolbar"><button><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg> テーマ</button><button><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> コピー</button></div><div class="code-content"><div class="code-input">p = -1e17 + sqrt(1e34 + 1e18)</div><div class="code-output"><span class="variable-name">p = </span>0</div></div></div>' +
+      '<div class="code-block"><div class="code-toolbar"><button><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg> テーマ</button><button><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> コピー</button></div><div class="code-content"><div class="code-input">p == 0 <span class="code-comment">% true</span></div><div class="code-output"><span class="variable-name">ans = <span class="code-header">logical</span></span><br>&nbsp;&nbsp; 1</div></div></div>' +
+      '<p><code>vpa</code> でうまくいかなかったのはなぜでしょうか？あなたが <code>vpa</code> を呼び出した方法では:</p>' +
+      '<div class="code-block"><div class="code-toolbar"><button><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg> テーマ</button><button><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> コピー</button></div><div class="code-content"><div class="code-input">p = vpa(-1e17 + sqrt(1e34 + 1e18), 30)</div><div class="code-output"><span class="variable-name">p = </span>0.0</div></div></div>' +
+      '<p>vpa() が呼び出される入力引数を生成するための計算を倍精度で行い、その倍精度の結果を vpa に渡しています。vpa が呼び出される時点で、p はすでに 0 になっています。</p>' +
+      '<p>各数値を <code>sym</code> に変換してから計算を行うことができます。こうすると、MATLAB はシンボリックに計算を行います。p の表示にある根号記号に注目してください。</p>' +
+      '<div class="code-block"><div class="code-toolbar"><button><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg> テーマ</button><button><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> コピー</button></div><div class="code-content"><div class="code-input">x17 = sym(1e17);</div><div class="code-input">x34 = sym(1e34);</div><div class="code-input">x18 = sym(1e18);</div><div class="code-input">p = -x17 + sqrt(x34+x18)</div><div class="code-output"><span class="variable-name">p = </span>(10000000000000000100000000000000000)<sup>1/2</sup> - 100000000000000000</div></div></div>' +
+      '<p>そのシンボリックな回答に対して vpa を呼び出すことで、可変精度演算を使用して評価できます。</p>' +
+      '<div class="code-block"><div class="code-toolbar"><button><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg> テーマ</button><button><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> コピー</button></div><div class="code-content"><div class="code-input">vpa(p, 30)</div><div class="code-output"><span class="variable-name">ans = </span>4.99999999999999987499995984189</div></div></div>'
+  };
+
+  if (sectionId === 'question') {
+    var titleEl = document.getElementById('question-title');
+    titleEl.setAttribute('data-original', titleEl.textContent);
+    titleEl.textContent = 'MATLABで大きな数に非常に小さな数を加えて精度を保持できますか';
+  }
+
+  container.setAttribute('data-original', container.innerHTML);
+  container.innerHTML = translations[sectionId];
+}
+
+function translateComment(btn, commentId) {
+  var commentEl = document.getElementById(commentId);
+  var commentBody = commentEl.querySelector('.comment-body');
+
+  if (btn.classList.contains('translated')) {
+    btn.classList.remove('translated');
+    btn.innerHTML = '<img src="translate.svg" alt="" style="width: 14px; height: 14px;"> 翻訳';
+    commentBody.innerHTML = commentBody.getAttribute('data-original');
+    commentBody.removeAttribute('data-original');
+    return;
+  }
+
+  btn.classList.add('translated');
+  btn.innerHTML = '<img src="translate.svg" alt="" style="width: 14px; height: 14px;"> 元の文を表示';
+
+  var commentTranslations = {
+    'question-comment-1':
+      '<p>@FUN-AKEDE</p>' +
+      '<p><strong>ニューラルネットフィッティングアプリを開く</strong></p>' +
+      '<p><em>R2026a以前: MATLABツールストリップ: [アプリ] タブの [Machine Learning and Deep Learning] の下でアプリアイコンをクリックします。</em></p>' +
+      '<p>MATLABコマンドプロンプト: <code>nftool</code> と入力します。</p>' +
+      '<p>R2026aではコマンドラインからしか開けないということを意味しています。</p>',
+    'question-comment-2':
+      '<p>@Steven Lord</p>' +
+      '<p>これはFUN-AKEDEがツールストリップでニューラルフィッティングアプリが見つからないというコメントに対する返信として投稿されました。その後、彼らはコメントを削除しています。</p>',
+    'answer-comment-1':
+      '<p>良い説明です。Symbolic Math Toolboxを必要としない追加のアプローチとして、式を代数的に変形する方法があります。式 -a + sqrt(a^2 + b) に対して、共役で乗除することで b / (a + sqrt(a^2 + b)) が得られ、壊滅的な桁落ちを避けることができます。</p>',
+    'answer-comment-2':
+      '<p>良い指摘です、James。壊滅的な桁落ちを避けるための式の変形は、可能な場合に最も良いアプローチです。追加のツールボックスを必要とせず、ネイティブの倍精度演算で動作します。</p>'
+  };
+
+  commentBody.setAttribute('data-original', commentBody.innerHTML);
+  commentBody.innerHTML = commentTranslations[commentId];
+}
+
+function getContainerId(sectionId) {
+  switch(sectionId) {
+    case 'question': return 'question-body';
+    case 'accepted-answer': return 'accepted-answer-body';
+  }
+}
+</script>
+
+</body>
+</html>

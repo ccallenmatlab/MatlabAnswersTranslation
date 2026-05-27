@@ -1215,14 +1215,6 @@ a:hover {
               </div>
             </div>
 
-            <!-- Inline Translate Button for Answer -->
-            <div style="display: flex; justify-content: flex-end; margin-bottom: 12px;">
-              <button class="btn-inline-translate" onclick="translateSection(this, 'accepted-answer')">
-                <img src="translate.svg" alt="" style="width: 14px; height: 14px;">
-                翻訳
-              </button>
-            </div>
-
             <!-- Answer Body -->
             <div class="answer-body" id="accepted-answer-body">
               <!-- Code block 1 -->
@@ -1297,6 +1289,14 @@ a:hover {
                   <div class="code-output"><span class="variable-name">ans = </span>4.99999999999999987499995984189</div>
                 </div>
               </div>
+            </div>
+
+            <!-- Inline Translate Button for Answer -->
+            <div style="display: flex; justify-content: flex-end; margin-top: 12px;">
+              <button class="btn-inline-translate" onclick="translateSection(this, 'accepted-answer')">
+                <img src="translate.svg" alt="" style="width: 14px; height: 14px;">
+                翻訳
+              </button>
             </div>
 
             <!-- Comments on Accepted Answer -->

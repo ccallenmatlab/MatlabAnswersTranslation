@@ -843,10 +843,20 @@ a:hover {
 
 /* Footer */
 .site-footer {
-  background: #fff;
+  background: #e6e6e6;
   border-top: 1px solid #ddd;
-  padding: 20px 0;
+  padding: 40px 0;
   margin-top: 40px;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.footer-left {
+  flex: 1;
 }
 
 .footer-links {
@@ -858,13 +868,34 @@ a:hover {
 }
 
 .footer-links a {
-  color: #0076a8;
+  color: #333;
   font-size: 13px;
 }
 
 .copyright {
   color: #666;
   font-size: 12px;
+}
+
+.btn-region {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  color: #333;
+  border: 1px solid #333;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: 'Noto Sans JP', 'Roboto', sans-serif;
+  text-decoration: none;
+}
+
+.btn-region:hover {
+  background: rgba(0,0,0,0.05);
+  text-decoration: none;
 }
 
 /* SVG Icon for matrix/grid */
@@ -1342,16 +1373,24 @@ a:hover {
 <!-- Footer -->
 <footer class="site-footer">
   <div class="container">
-    <ul class="footer-links">
-      <li><a href="#">トラストセンター</a></li>
-      <li><a href="#">商標</a></li>
-      <li><a href="#">プライバシーポリシー</a></li>
-      <li><a href="#">海賊版防止</a></li>
-      <li><a href="#">アプリケーションステータス</a></li>
-      <li><a href="#">利用規約</a></li>
-      <li><a href="#">お問い合わせ</a></li>
-    </ul>
-    <p class="copyright">&copy; 1994-2026 The MathWorks, Inc.</p>
+    <div class="footer-content">
+      <div class="footer-left">
+        <ul class="footer-links">
+          <li><a href="#">トラストセンター</a></li>
+          <li><a href="#">商標</a></li>
+          <li><a href="#">プライバシーポリシー</a></li>
+          <li><a href="#">海賊版防止</a></li>
+          <li><a href="#">アプリケーションステータス</a></li>
+          <li><a href="#">利用規約</a></li>
+          <li><a href="#">お問い合わせ</a></li>
+        </ul>
+        <p class="copyright">&copy; 1994-2026 The MathWorks, Inc.</p>
+      </div>
+      <a href="#" class="btn-region">
+        <img src="globe.svg" alt="" style="width: 16px; height: 16px;">
+        日本
+      </a>
+    </div>
   </div>
 </footer>
 
